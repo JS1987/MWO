@@ -2,6 +2,7 @@ package pl.edu.agh.mwo.invoice;
 
 import java.math.BigDecimal;
 
+import org.hamcrest.Matcher;
 import org.hamcrest.Matchers;
 import org.junit.Assert;
 import org.junit.Before;
@@ -19,6 +20,7 @@ public class InvoiceTest {
 	@Before
 	public void createEmptyInvoiceForTheTest() {
 		invoice = new Invoice();
+		
 	}
 
 	@Test
@@ -104,4 +106,36 @@ public class InvoiceTest {
 	public void testInvoiceWithNegativeQuantity() {
 		invoice.addProduct(new DairyProduct("Zsiadle mleko", new BigDecimal("5.55")), -1);
 	}
+	
+	@Test
+	public void testInvoiceHasNumber()
+	{
+	int number = invoice.getNumber();
+	Assert.assertThat(number, Matchers.greaterThan(0));
+	Assert.assertTrue(number > 0);
+	}
+	
+	@Test
+	public void testTwoInvoicesHaveDifferentNumbers()
+	{
+	int number1 = new Invoice().getNumber();
+	int number2 = new Invoice().getNumber();
+	Assert.assertNotEquals(number1, number2);
+	}
+	
+	@Test
+	public void testTheSameInvoiceDoseNotChangeTheNumber()
+	{
+	Assert.assertEquals(invoice.getNumber(), invoice.getNumber());
+	}
+	
+	@Test
+	public void testnextNumberGreaterThenLastOne()
+	{
+	int number1 = new Invoice().getNumber();
+	int number2 = new Invoice().getNumber();
+	Assert.assertThat(number1, Matchers.lessThan(number2));
+	Assert.assertTrue(number2 > number1);
+	}
+	
 }
